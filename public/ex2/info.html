@@ -8,11 +8,11 @@
          <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     </head>
     <body>
-        <div class="bg-light text-center p-5 mb-4">
+        <div onchange="getData()" class="bg-light text-center p-5 mb-4">
             <h2>Choose an option:</h2>
             <label for="limit">Limit:</label>
             <input id="limit" type="number" min=1 max=5 value=1>
-            <select onchange="getData()" id="type">
+            <select id="type">
                 <option value="customers">Customers</option>
                 <option value="products">Products</option>
                 <option value="suppliers">Suppliers</option>
@@ -20,11 +20,39 @@
             
         </div>
         <div id="result">
+            <table class='table'></table>
 
         </div>
         <script>
-            function getData() {
- 
+            async function getData() {
+                const type = document.getElementById('type').value
+                const limit = document.getElementById('limit').value
+
+                let data = await axios.get("http://localhost:3000/data", { params: { type, limit } }).then(res => res.data);
+                console.log(data.records);
+                let headerRowElement = document.createElement('tr');
+                let table = document.getElementsByTagName('table')[0];
+                table.innerHTML = "";
+                let thead = document.createElement('thead');
+                for (header of Object.keys(data.records[0])) {
+                    let headerElement = document.createElement('th');
+                    headerElement.innerText = header;
+                    headerRowElement.appendChild(headerElement);
+                };
+                thead.appendChild(headerRowElement)
+                table.appendChild(thead);
+
+                let tbody = document.createElement('tbody');
+                for (row of data.records) {
+                    let rowElement = document.createElement('tr');
+                    for (value of Object.values(row)) {
+                        let cellData = document.createElement('td');
+                        cellData.innerText = value
+                        rowElement.appendChild(cellData)
+                    }
+                    tbody.appendChild(rowElement);
+                }
+                table.appendChild(tbody);
             }
 
         </script>
