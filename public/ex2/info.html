@@ -20,19 +20,22 @@
             
         </div>
         <div id="result">
-            <table class='table'></table>
-
         </div>
         <script>
             async function getData() {
+                const result = document.getElementById('result')
+                result.innerHTML = ""
+                
                 const type = document.getElementById('type').value
                 const limit = document.getElementById('limit').value
 
+                const h2 = document.createElement('h2')
+                h2.innerText = type + ":"
+                result.appendChild(h2)
                 let data = await axios.get("http://localhost:3000/data", { params: { type, limit } }).then(res => res.data);
-                console.log(data.records);
                 let headerRowElement = document.createElement('tr');
-                let table = document.getElementsByTagName('table')[0];
-                table.innerHTML = "";
+                let table = document.createElement('table');
+                table.className = "table"
                 let thead = document.createElement('thead');
                 for (header of Object.keys(data.records[0])) {
                     let headerElement = document.createElement('th');
@@ -53,6 +56,7 @@
                     tbody.appendChild(rowElement);
                 }
                 table.appendChild(tbody);
+                result.appendChild(table);
             }
 
         </script>
