@@ -30,7 +30,7 @@
                 const limit = document.getElementById('limit').value
 
                 const h2 = document.createElement('h2')
-                h2.innerText = type + ":"
+                h2.innerText = type
                 result.appendChild(h2)
                 let data = await axios.get("http://localhost:3000/data", { params: { type, limit } }).then(res => res.data);
                 let headerRowElement = document.createElement('tr');
