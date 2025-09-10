@@ -64,19 +64,20 @@
             }
             const allData = []
             if (category === "all") {
-                let categories = await getCategories();
+                let select = document.getElementById('selectCategory');
+                let categories = (Array.from(select.children))
+                    .filter(option => (option.value != 0 && option.value != 'all') )
+                    .map(option => (option.value));
                 let retrieve = async (category) => {
                     const data = await axios.get("http://localhost:3000/items", { params: { category } }).then(res => res.data);
                     allData.push(...data);
                 }
-                console.log(categories)
                 await Promise.all(categories.map(category => retrieve(category)));
             } else {
                 const data = await axios.get("http://localhost:3000/items", { params: { category } }).then(res => res.data);
                 allData.push(...data);
             }
             showItems(allData);
-            console.log(allData);
         }
 
         function showItems(items) {
@@ -84,12 +85,16 @@
             // Each item should be displayed in a bootstrap card format
             // The display should be responsive 3 columns on large screens, 2 columns on medium screens, and 1 column on small screens
             let list = document.getElementById('itemsList')
+            while (list.firstChild) {
+                list.firstChild.remove();
+            }
             list.className = "row my-3 py-3 justify-content-around";
-            list.innerHTML = ""
             for (let item of items) {
+                let cardDiv = document.createElement('div');
+                cardDiv.className = "col-lg-4 col-md-6"
                 let card = document.createElement('div');
-                card.className = "col-lg-3 col-md-6 card text-center"
-                card.style = "width: 18rem;"
+                card.className = "card text-center mb-4 mx-auto"
+                card.style.width = "18rem";
                 let body = document.createElement('div');
                 body.className = "card-body"
                 let title = document.createElement('h5');
@@ -101,7 +106,8 @@
                 body.appendChild(title);
                 body.appendChild(text);
                 card.appendChild(body)
-                list.appendChild(card)
+                cardDiv.appendChild(card)
+                list.appendChild(cardDiv)
             }
 
         }

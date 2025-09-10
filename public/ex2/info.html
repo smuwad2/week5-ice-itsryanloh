@@ -24,7 +24,9 @@
         <script>
             async function getData() {
                 const result = document.getElementById('result')
-                result.innerHTML = ""
+                while (result.firstChild) {
+                    result.firstChild.remove()
+                }
                 
                 const type = document.getElementById('type').value
                 const limit = document.getElementById('limit').value
