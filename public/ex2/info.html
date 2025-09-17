@@ -38,7 +38,7 @@
                 let headerRowElement = document.createElement('tr');
                 let table = document.createElement('table');
                 let tbody = document.createElement('tbody');
-                table.className = "table"
+                table.classList.add("table")
                 for (header of Object.keys(data.records[0])) {
                     let headerElement = document.createElement('th');
                     headerElement.innerText = header;
